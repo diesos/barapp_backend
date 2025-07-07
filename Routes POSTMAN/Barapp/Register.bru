@@ -1,0 +1,22 @@
+meta {
+  name: Register
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:8080/api/auth/register
+  body: json
+  auth: inherit
+}
+
+params:query {
+  : 
+}
+
+body:json {
+  {
+      "email": "admin@barapp.com",
+      "password": "Admin123!"
+  }
+}

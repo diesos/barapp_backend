@@ -1,0 +1,15 @@
+meta {
+  name: Get cocktails
+  type: http
+  seq: 4
+}
+
+get {
+  url: http://localhost:8080/api/cocktails/all
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJFTUFJTCI6ImFkbWlpbkBiYXJhcHAuY29tIiwiVVNFUl9JRCI6NCwiUk9MRSI6IlJPTEVfVVNFUiIsImV4cCI6MTc1MjUwMDI2OSwiaXNzIjoiQmFyQXBwIn0.tdP0X1EBhWoHvzuCOAVaj7I5Tui2kD4Dd1-8ecMT0uU
+}

@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: barapp-postgres
+    environment:
+      POSTGRES_DB: barapp
+      POSTGRES_USER: barapp_user
+      POSTGRES_PASSWORD: barapp_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    networks:
+      - barapp-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U barapp_user -d barapp"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Spring Boot Application
+  barapp-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: barapp-backend
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/barapp
+      SPRING_DATASOURCE_USERNAME: barapp_user
+      SPRING_DATASOURCE_PASSWORD: barapp_password
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
+      JWT_ALGORITHM_KEY: SuperSecureSecretKeyForBarApp2025
+      JWT_ISSUER: BarApp
+      JWT_EXPIRY_IN_SECONDS: 604800
+      ENCRYPTION_SALT_ROUNDS: 12
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - barapp-network
+    restart: unless-stopped
+
+  # pgAdmin (optional, for database management)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: barapp-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@barapp.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - barapp-network
+    profiles:
+      - dev  # Only start with --profile dev
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  barapp-network:
+    driver: bridge
