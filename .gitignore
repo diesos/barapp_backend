@@ -1,0 +1,8 @@
+./target/*
+
+target/*
+target/classes/*
+target/classes/com/Side/Project/barapp_backend/dao/RecipeDAO.class
+target/classes/com/Side/Project/barapp_backend/models/Category.class
+target/classes/com/Side/Project/barapp_backend/models/Recipe.class
+target/classes/com/Side/Project/barapp_backend/models/RecipeIngredient.class

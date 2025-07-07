@@ -20,6 +20,7 @@ public class Recipe {
   @Column(name = "description", length = 255)
   private String description;
 
+  @JsonIgnore
   @ManyToOne(optional = false)
   @JoinColumn(name = "cocktail_id", nullable = false)
   private Cocktail cocktail;
@@ -27,8 +28,17 @@ public class Recipe {
   @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<RecipeIngredient> recipeIngredients = new ArrayList<>();
 
+  public Long getCocktailId() {
+    return cocktail != null ? cocktail.getId() : null;
+  }
+
+  public String getCocktailName() {
+    return cocktail != null ? cocktail.getName() : null;
+  }
+
   // Constructors
-  public Recipe() {}
+  public Recipe() {
+  }
 
   public Recipe(String name, String description, Cocktail cocktail) {
     this.name = name;

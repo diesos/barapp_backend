@@ -17,10 +17,12 @@ public class Category {
   @Column(name = "name", nullable = false, length = 255)
   private String name;
 
+  @JsonIgnore
   @ManyToOne
   @JoinColumn(name = "parent_id")
   private Category parent;
 
+  @JsonIgnore
   @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Category> subcategories = new ArrayList<>();
 
@@ -29,7 +31,8 @@ public class Category {
   private List<Cocktail> cocktails = new ArrayList<>();
 
   // Constructors
-  public Category() {}
+  public Category() {
+  }
 
   public Category(String name) {
     this.name = name;

@@ -8,5 +8,8 @@ import java.util.List;
 
 public interface RecipeDAO extends ListCrudRepository<Recipe, Long> {
     List<Recipe> findByCocktail(Cocktail cocktail);
-    List<Recipe> findByCocktailId(Long cocktailId);
+
+    List<Recipe> findByCocktail_Id(Long cocktailId); // CORRIGER: utiliser cocktail_Id
+
+    List<Recipe> findByNameContainingIgnoreCase(String name);
 }

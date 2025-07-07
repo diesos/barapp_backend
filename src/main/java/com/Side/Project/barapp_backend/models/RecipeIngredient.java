@@ -1,5 +1,7 @@
 package com.Side.Project.barapp_backend.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -9,6 +11,7 @@ public class RecipeIngredient {
     @EmbeddedId
     private RecipeIngredientId id;
 
+    @JsonIgnore
     @ManyToOne
     @MapsId("recipeId")
     @JoinColumn(name = "recipe_id")
@@ -23,7 +26,8 @@ public class RecipeIngredient {
     private Integer quantity;
 
     // Constructors
-    public RecipeIngredient() {}
+    public RecipeIngredient() {
+    }
 
     public RecipeIngredient(Recipe recipe, Ingredient ingredient, Integer quantity) {
         this.recipe = recipe;
