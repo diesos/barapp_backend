@@ -30,7 +30,7 @@ Application backend pour BarApp - Un système de gestion de bar et de commandes 
 
 ### 1. Cloner le projet
 ```bash
-git clone <votre-repo>
+git clone https://github.com/diesos/barapp_backend
 cd barapp-backend
 ```
 
