@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface IngredientDAO extends ListCrudRepository<Ingredient, Long> {
     List<Ingredient> findByIsAvailableTrue();
+
     List<Ingredient> findByNameContainingIgnoreCase(String name);
 }
