@@ -37,7 +37,6 @@ public class SecurityConfig {
 						.requestMatchers("/admin/**").authenticated() // Requiert auth
 						.anyRequest().permitAll() // TOUT le reste autorisé
 				)
-
 				.addFilterBefore(jwtAuthFilter,
 						org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class)
 				.formLogin(login -> login.disable())

@@ -20,6 +20,7 @@ public class CocktailRequest {
     private Boolean isDiscount = false;
     private Integer discountPrice;
     private Long categoryId;
+    private String imageUrl;
 
     // Getters and Setters
     public String getName() {
@@ -84,5 +85,13 @@ public class CocktailRequest {
 
     public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

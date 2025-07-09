@@ -1,5 +1,7 @@
 package com.Side.Project.barapp_backend.controller.cocktail;
 
+import com.Side.Project.barapp_backend.api.models.CocktailResponse;
+import com.Side.Project.barapp_backend.api.models.CocktailSizeResponse;
 import com.Side.Project.barapp_backend.models.Cocktail;
 import com.Side.Project.barapp_backend.models.User;
 import com.Side.Project.barapp_backend.models.UserRole;
@@ -11,6 +13,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/cocktails")
@@ -26,9 +29,24 @@ public class CocktailController {
      * Get all available cocktails (public endpoint)
      */
     @GetMapping
-    public ResponseEntity<List<Cocktail>> getAvailableCocktails() {
-        List<Cocktail> cocktails = cocktailService.getAvailableCocktails();
-        return ResponseEntity.ok(cocktails);
+    public ResponseEntity<List<CocktailResponse>> getVisibleCocktails() {
+        List<Cocktail> cocktails = cocktailService.getVisibleCocktails(); // à implémenter
+        List<CocktailResponse> responses = cocktails.stream()
+                .map(cocktail -> new CocktailResponse(
+                        cocktail.getId(),
+                        cocktail.getName(),
+                        cocktail.getDescription(),
+                        cocktail.getIsVisible(),
+                        cocktail.getIsAvailable(),
+                        cocktail.getIsDiscount(),
+                        cocktail.getDiscountPrice(),
+                        cocktail.getCategory(),
+                        cocktail.getSizes().stream()
+                                .map(size -> new CocktailSizeResponse(size.getId(), size.getSize(), size.getPrice()))
+                                .collect(Collectors.toList()),
+                        cocktail.getImageUrl()))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(responses);
     }
 
     /**
@@ -36,9 +54,26 @@ public class CocktailController {
      */
     @PreAuthorize("hasAnyRole('ROLE_BARMAKER', 'ROLE_ADMIN')")
     @GetMapping("/all")
-    public ResponseEntity<List<Cocktail>> getAllCocktails(@AuthenticationPrincipal User user) {
+    public ResponseEntity<List<CocktailResponse>> getAllCocktails(@AuthenticationPrincipal User user) {
         List<Cocktail> cocktails = cocktailService.getAllCocktails();
-        return ResponseEntity.ok(cocktails);
+        List<CocktailResponse> responses = cocktails.stream().map(cocktail -> {
+            CocktailResponse resp = new CocktailResponse(
+                    cocktail.getId(),
+                    cocktail.getName(),
+                    cocktail.getDescription(),
+                    cocktail.getIsVisible(),
+                    cocktail.getIsAvailable(),
+                    cocktail.getIsDiscount(),
+                    cocktail.getDiscountPrice(),
+                    cocktail.getCategory(),
+                    cocktail.getSizes().stream()
+                            .map(size -> new CocktailSizeResponse(size.getId(), size.getSize(), size.getPrice()))
+                            .collect(Collectors.toList()),
+                    cocktail.getImageUrl() // <-- en dernier et ensuite tu fermes la parenthèse !
+            );
+            return resp;
+        }).collect(Collectors.toList());
+        return ResponseEntity.ok(responses);
     }
 
     /**

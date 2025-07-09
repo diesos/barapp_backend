@@ -62,17 +62,17 @@ INSERT INTO ingredient (name, price, is_available) VALUES
     ('Grenadine', 45, true)
 ON CONFLICT DO NOTHING;
 -- Insert cocktails
-INSERT INTO cocktail (name, description, price, is_visible, is_available, is_discount, discount_price, category_id) VALUES
-('Mojito', 'Cocktail cubain à base de rhum, menthe et citron vert', 950, true, true, false, NULL, 5),
-('Caipirinha', 'Cocktail brésilien à base de cachaça et citron vert', 850, true, true, false, NULL, 5),
-('Piña Colada', 'Cocktail tropical à base de rhum, coco et ananas', 1200, true, true, true, 1000, 5),
-('Vodka Tonic', 'Classique vodka avec tonic et citron', 750, true, true, false, NULL, 6),
-('Gin Tonic', 'Gin premium avec tonic et citron', 800, true, true, false, NULL, 7),
-('Whisky Sour', 'Whisky avec citron et sucre', 1100, true, true, false, NULL, 8),
-('Cosmopolitan', 'Vodka, cranberry et citron vert', 950, true, true, false, NULL, 2),
-('Sex on the Beach', 'Cocktail fruité multicolore', 1050, true, true, true, 900, 2),
-('Bloody Mary', 'Vodka épicée avec jus de tomate', 900, true, true, false, NULL, 6),
-('Virgin Mojito', 'Mojito sans alcool', 650, true, true, false, NULL, 4)
+INSERT INTO cocktail (name, description, price, is_visible, is_available, is_discount, discount_price, category_id, image_url) VALUES
+('Mojito', 'Cocktail cubain à base de rhum, menthe et citron vert', 950, true, true, false, NULL, 5, 'https://images.squarespace-cdn.com/content/v1/5bcccf8b9b7d15579477a125/90b3a927-bad4-4c64-bd2f-2f62ea5424a2/Virgin+Mojito.jpg'),
+('Caipirinha', 'Cocktail brésilien à base de cachaça et citron vert', 850, true, true, false, NULL, 5, 'https://drinkch.rokka.io/new-composition-600/o-dpr-2/2609a8.jpg'),
+('Piña Colada', 'Cocktail tropical à base de rhum, coco et ananas', 1200, true, true, true, 1000, 5, 'https://drinkch.rokka.io/new-composition-600/o-dpr-2/eb2e4a.jpg'),
+('Vodka Tonic', 'Classique vodka avec tonic et citron', 750, true, true, false, NULL, 6, 'https://happyhourhacks.com/wp-content/uploads/vodka-tonic-15.jpg'),
+('Gin Tonic', 'Gin premium avec tonic et citron', 800, true, true, false, NULL, 7, 'https://theginguru.fr/wp-content/uploads/2024/08/recette-cocktail-gin-tonic.jpg'),
+('Whisky Sour', 'Whisky avec citron et sucre', 1100, true, true, false, NULL, 8, 'https://blog-distiller.imgix.net/wp-content/uploads/2018/08/24143617/whiskeysourADOBE.jpg?auto=format&ixlib=php-3.3.0&q=80&w=500&fit=crop&ixid=eyJhcHBfaWQiOjEyMDd9'),
+('Cosmopolitan', 'Vodka, cranberry et citron vert', 950, true, true, false, NULL, 2, 'https://drinkch.rokka.io/new-composition-600/o-dpr-2/f30751.jpg'),
+('Sex on the Beach', 'Cocktail fruité multicolore', 1050, true, true, true, 900, 2, 'https://drinkch.rokka.io/new-composition-600/o-dpr-2/36716f.jpg'),
+('Bloody Mary', 'Vodka épicée avec jus de tomate', 900, true, true, false, NULL, 6, 'https://drinkch.rokka.io/new-composition-600/o-dpr-2/083bff.jpg'),
+('Virgin Mojito', 'Mojito sans alcool', 650, true, true, false, NULL, 4, 'https://images.squarespace-cdn.com/content/v1/5bcccf8b9b7d15579477a125/90b3a927-bad4-4c64-bd2f-2f62ea5424a2/Virgin+Mojito.jpg')
 ON CONFLICT DO NOTHING;
 
 -- Insert recipes

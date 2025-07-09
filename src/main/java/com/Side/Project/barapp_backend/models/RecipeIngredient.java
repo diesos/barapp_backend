@@ -1,6 +1,7 @@
 package com.Side.Project.barapp_backend.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.math.BigDecimal;
 
 import jakarta.persistence.*;
 
@@ -23,13 +24,13 @@ public class RecipeIngredient {
     private Ingredient ingredient;
 
     @Column(name = "quantity", nullable = false)
-    private Integer quantity;
+    private BigDecimal quantity;
 
     // Constructors
     public RecipeIngredient() {
     }
 
-    public RecipeIngredient(Recipe recipe, Ingredient ingredient, Integer quantity) {
+    public RecipeIngredient(Recipe recipe, Ingredient ingredient, BigDecimal quantity) {
         this.recipe = recipe;
         this.ingredient = ingredient;
         this.quantity = quantity;
@@ -61,11 +62,11 @@ public class RecipeIngredient {
         this.ingredient = ingredient;
     }
 
-    public Integer getQuantity() {
+    public BigDecimal getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
     }
 }

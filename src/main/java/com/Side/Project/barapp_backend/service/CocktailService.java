@@ -1,6 +1,7 @@
 package com.Side.Project.barapp_backend.service;
 
 import com.Side.Project.barapp_backend.models.Cocktail;
+import com.Side.Project.barapp_backend.models.CocktailSize;
 import com.Side.Project.barapp_backend.dao.CocktailDAO;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,10 @@ public class CocktailService {
      */
     public List<Cocktail> getAvailableCocktails() {
         return cocktailDAO.findByIsVisibleTrueAndIsAvailableTrue();
+    }
+
+    public List<Cocktail> getVisibleCocktails() {
+        return cocktailDAO.findByIsVisibleTrue();
     }
 
     /**
@@ -62,6 +67,12 @@ public class CocktailService {
      * Create new cocktail (barmaker only)
      */
     public Cocktail createCocktail(Cocktail cocktail) {
+        // On set le parent pour chaque size
+        if (cocktail.getSizes() != null) {
+            for (CocktailSize size : cocktail.getSizes()) {
+                size.setCocktail(cocktail);
+            }
+        }
         return cocktailDAO.save(cocktail);
     }
 
@@ -73,11 +84,9 @@ public class CocktailService {
                 .map(cocktail -> {
                     cocktail.setName(cocktailDetails.getName());
                     cocktail.setDescription(cocktailDetails.getDescription());
-                    cocktail.setPrice(cocktailDetails.getPrice());
                     cocktail.setIsVisible(cocktailDetails.getIsVisible());
                     cocktail.setIsAvailable(cocktailDetails.getIsAvailable());
                     cocktail.setIsDiscount(cocktailDetails.getIsDiscount());
-                    cocktail.setDiscountPrice(cocktailDetails.getDiscountPrice());
                     cocktail.setCategory(cocktailDetails.getCategory());
                     return cocktailDAO.save(cocktail);
                 })

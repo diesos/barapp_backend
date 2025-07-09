@@ -8,8 +8,16 @@ import java.util.List;
 
 public interface CocktailDAO extends ListCrudRepository<Cocktail, Long> {
     List<Cocktail> findByIsVisibleTrueAndIsAvailableTrue();
+
     List<Cocktail> findByCategory(Category category);
+
     List<Cocktail> findByCategoryId(Long categoryId);
+
     List<Cocktail> findByNameContainingIgnoreCase(String name);
+
     List<Cocktail> findByIsDiscountTrue();
+
+    List<Cocktail> findByIsVisibleTrue();
+
+    List<Cocktail> findByIsAvailableTrue();
 }

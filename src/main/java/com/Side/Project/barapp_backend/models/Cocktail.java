@@ -20,7 +20,7 @@ public class Cocktail {
   @Column(name = "description", length = 255)
   private String description;
 
-  @Column(name = "price", nullable = false)
+  @Column(name = "price", nullable = true)
   private Integer price;
 
   @Column(name = "is_visible", nullable = false)
@@ -29,11 +29,14 @@ public class Cocktail {
   @Column(name = "is_available", nullable = false)
   private Boolean isAvailable = true;
 
-  @Column(name = "is_discount", nullable = false)
+  @Column(name = "is_discount", nullable = true)
   private Boolean isDiscount = false;
 
   @Column(name = "discount_price")
   private Integer discountPrice;
+
+  @Column(name = "image_url", length = 255)
+  private String imageUrl;
 
   @ManyToOne
   @JoinColumn(name = "category_id")
@@ -149,10 +152,26 @@ public class Cocktail {
     this.basketLines = basketLines;
   }
 
+  public List<CocktailSize> getSizes() {
+    return sizes;
+  }
+
+  public void setSizes(List<CocktailSize> sizes) {
+    this.sizes = sizes;
+  }
+
   /**
    * Get the current price (discount price if available, otherwise regular price)
    */
   public Integer getCurrentPrice() {
     return isDiscount && discountPrice != null ? discountPrice : price;
+  }
+
+  public String getImageUrl() {
+    return imageUrl;
+  }
+
+  public void setImageUrl(String imageUrl) {
+    this.imageUrl = imageUrl;
   }
 }

@@ -4,6 +4,7 @@ import com.Side.Project.barapp_backend.models.*;
 import com.Side.Project.barapp_backend.dao.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.math.BigDecimal;
 
 import java.util.List;
 import java.util.Optional;
@@ -128,12 +129,12 @@ public class RecipeService {
 	// Inner class for recipe ingredient requests
 	public static class RecipeIngredientRequest {
 		private Long ingredientId;
-		private Integer quantity;
+		private BigDecimal quantity;
 
 		public RecipeIngredientRequest() {
 		}
 
-		public RecipeIngredientRequest(Long ingredientId, Integer quantity) {
+		public RecipeIngredientRequest(Long ingredientId, BigDecimal quantity) {
 			this.ingredientId = ingredientId;
 			this.quantity = quantity;
 		}
@@ -146,11 +147,11 @@ public class RecipeService {
 			this.ingredientId = ingredientId;
 		}
 
-		public Integer getQuantity() {
+		public BigDecimal getQuantity() {
 			return quantity;
 		}
 
-		public void setQuantity(Integer quantity) {
+		public void setQuantity(BigDecimal quantity) {
 			this.quantity = quantity;
 		}
 	}
