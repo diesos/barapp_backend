@@ -1,5 +1,6 @@
 package com.Side.Project.barapp_backend.controller.cocktail;
 
+import com.Side.Project.barapp_backend.api.models.CocktailRequest;
 import com.Side.Project.barapp_backend.api.models.CocktailResponse;
 import com.Side.Project.barapp_backend.api.models.CocktailSizeResponse;
 import com.Side.Project.barapp_backend.models.Cocktail;
@@ -116,17 +117,14 @@ public class CocktailController {
     /**
      * Create new cocktail (barmaker only)
      */
+    @PreAuthorize("hasAnyRole('ROLE_BARMAKER', 'ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<Cocktail> createCocktail(
-            @RequestBody Cocktail cocktail,
+            @RequestBody CocktailRequest cocktailRequest,
             @AuthenticationPrincipal User user) {
 
-        if (user.getRole() != UserRole.ROLE_BARMAKER && user.getRole() != UserRole.ROLE_ADMIN) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-
         try {
-            Cocktail createdCocktail = cocktailService.createCocktail(cocktail);
+            Cocktail createdCocktail = cocktailService.createCocktail(cocktailRequest);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdCocktail);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -136,18 +134,14 @@ public class CocktailController {
     /**
      * Update cocktail (barmaker only)
      */
+    @PreAuthorize("hasAnyRole('ROLE_BARMAKER', 'ROLE_ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<Cocktail> updateCocktail(
             @PathVariable Long id,
-            @RequestBody Cocktail cocktailDetails,
+            @RequestBody CocktailRequest cocktailRequest,
             @AuthenticationPrincipal User user) {
-
-        if (user.getRole() != UserRole.ROLE_BARMAKER && user.getRole() != UserRole.ROLE_ADMIN) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-
         try {
-            Cocktail updatedCocktail = cocktailService.updateCocktail(id, cocktailDetails);
+            Cocktail updatedCocktail = cocktailService.updateCocktail(id, cocktailRequest);
             return ResponseEntity.ok(updatedCocktail);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
@@ -157,19 +151,16 @@ public class CocktailController {
     /**
      * Toggle cocktail availability (barmaker only)
      */
+    @PreAuthorize("hasAnyRole('ROLE_BARMAKER', 'ROLE_ADMIN')")
     @PatchMapping("/{id}/toggle-availability")
     public ResponseEntity<Cocktail> toggleAvailability(
             @PathVariable Long id,
             @AuthenticationPrincipal User user) {
-
-        if (user.getRole() != UserRole.ROLE_BARMAKER && user.getRole() != UserRole.ROLE_ADMIN) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-
         try {
             Cocktail updatedCocktail = cocktailService.toggleAvailability(id);
             return ResponseEntity.ok(updatedCocktail);
         } catch (RuntimeException e) {
+            e.printStackTrace();
             return ResponseEntity.notFound().build();
         }
     }

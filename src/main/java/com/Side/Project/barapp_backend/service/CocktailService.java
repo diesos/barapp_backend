@@ -2,9 +2,15 @@ package com.Side.Project.barapp_backend.service;
 
 import com.Side.Project.barapp_backend.models.Cocktail;
 import com.Side.Project.barapp_backend.models.CocktailSize;
+import com.Side.Project.barapp_backend.api.models.CocktailRequest;
+import com.Side.Project.barapp_backend.api.models.CocktailSizeRequest;
 import com.Side.Project.barapp_backend.dao.CocktailDAO;
+import com.Side.Project.barapp_backend.dao.CategoryDAO;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,6 +18,9 @@ import java.util.Optional;
 public class CocktailService {
 
     private final CocktailDAO cocktailDAO;
+
+    @Autowired
+    private CategoryDAO categoryDAO;
 
     public CocktailService(CocktailDAO cocktailDAO) {
         this.cocktailDAO = cocktailDAO;
@@ -66,28 +75,66 @@ public class CocktailService {
     /**
      * Create new cocktail (barmaker only)
      */
-    public Cocktail createCocktail(Cocktail cocktail) {
-        // On set le parent pour chaque size
-        if (cocktail.getSizes() != null) {
-            for (CocktailSize size : cocktail.getSizes()) {
-                size.setCocktail(cocktail);
+    public Cocktail createCocktail(CocktailRequest cocktailRequest) {
+        Cocktail cocktail = new Cocktail();
+        cocktail.setName(cocktailRequest.getName());
+        cocktail.setDescription(cocktailRequest.getDescription());
+        cocktail.setIsVisible(cocktailRequest.getIsVisible());
+        cocktail.setIsAvailable(cocktailRequest.getIsAvailable());
+        cocktail.setIsDiscount(cocktailRequest.getIsDiscount());
+        cocktail.setDiscountPrice(cocktailRequest.getDiscountPrice());
+        cocktail.setCategory(categoryDAO.findById(cocktailRequest.getCategoryId())
+                .orElseThrow(
+                        () -> new RuntimeException("Category not found with id: " + cocktailRequest.getCategoryId())));
+        cocktail.setImageUrl(cocktailRequest.getImageUrl());
+
+        // On initialise les sizes et on les ajoute à la liste du cocktail
+        List<CocktailSize> sizes = new ArrayList<>();
+        if (cocktailRequest.getSizes() != null) {
+            for (CocktailSizeRequest sizeRequest : cocktailRequest.getSizes()) {
+                CocktailSize size = new CocktailSize();
+                size.setSize(sizeRequest.getSize());
+                size.setPrice(sizeRequest.getPrice());
+                size.setCocktail(cocktail); // très important : lien parent
+                sizes.add(size);
             }
         }
+        cocktail.setSizes(sizes); // lie la liste à ton cocktail
+
         return cocktailDAO.save(cocktail);
     }
 
     /**
      * Update cocktail (barmaker only)
      */
-    public Cocktail updateCocktail(Long id, Cocktail cocktailDetails) {
+    public Cocktail updateCocktail(Long id, CocktailRequest cocktailRequest) {
         return cocktailDAO.findById(id)
                 .map(cocktail -> {
-                    cocktail.setName(cocktailDetails.getName());
-                    cocktail.setDescription(cocktailDetails.getDescription());
-                    cocktail.setIsVisible(cocktailDetails.getIsVisible());
-                    cocktail.setIsAvailable(cocktailDetails.getIsAvailable());
-                    cocktail.setIsDiscount(cocktailDetails.getIsDiscount());
-                    cocktail.setCategory(cocktailDetails.getCategory());
+                    cocktail.setName(cocktailRequest.getName());
+                    cocktail.setDescription(cocktailRequest.getDescription());
+                    cocktail.setIsVisible(cocktailRequest.getIsVisible());
+                    cocktail.setIsAvailable(cocktailRequest.getIsAvailable());
+                    cocktail.setIsDiscount(cocktailRequest.getIsDiscount());
+                    cocktail.setCategory(
+                            categoryDAO.findById(cocktailRequest.getCategoryId())
+                                    .orElseThrow(() -> new RuntimeException(
+                                            "Category not found with id: " + cocktailRequest.getCategoryId())));
+                    cocktail.setDiscountPrice(cocktailRequest.getDiscountPrice());
+                    cocktail.setImageUrl(cocktailRequest.getImageUrl());
+
+                    List<CocktailSize> sizes = new ArrayList<>();
+                    if (cocktailRequest.getSizes() != null) {
+                        for (CocktailSizeRequest sizeRequest : cocktailRequest.getSizes()) {
+                            CocktailSize size = new CocktailSize();
+                            size.setSize(sizeRequest.getSize());
+                            size.setPrice(sizeRequest.getPrice());
+                            size.setCocktail(cocktail); // très important !
+                            sizes.add(size);
+                        }
+                    }
+                    cocktail.getSizes().clear(); // retire les anciennes (grâce à orphanRemoval)
+                    cocktail.getSizes().addAll(sizes);
+
                     return cocktailDAO.save(cocktail);
                 })
                 .orElseThrow(() -> new RuntimeException("Cocktail not found with id: " + id));
@@ -99,6 +146,9 @@ public class CocktailService {
     public Cocktail toggleAvailability(Long id) {
         return cocktailDAO.findById(id)
                 .map(cocktail -> {
+                    if (cocktail.getIsAvailable() == null) {
+                        cocktail.setIsAvailable(false);
+                    }
                     cocktail.setIsAvailable(!cocktail.getIsAvailable());
                     return cocktailDAO.save(cocktail);
                 })

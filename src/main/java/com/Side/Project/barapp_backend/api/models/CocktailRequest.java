@@ -3,6 +3,7 @@ package com.Side.Project.barapp_backend.api.models;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import java.util.List;
 
 public class CocktailRequest {
 
@@ -21,6 +22,7 @@ public class CocktailRequest {
     private Integer discountPrice;
     private Long categoryId;
     private String imageUrl;
+    private List<CocktailSizeRequest> sizes;
 
     // Getters and Setters
     public String getName() {
@@ -93,5 +95,13 @@ public class CocktailRequest {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public List<CocktailSizeRequest> getSizes() {
+        return sizes;
+    }
+
+    public void setSizes(List<CocktailSizeRequest> sizes) {
+        this.sizes = sizes;
     }
 }

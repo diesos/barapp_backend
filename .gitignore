@@ -1,5 +1,5 @@
 ./target/*
-
+*.class
 target/*
 target/classes/*
 target/classes/com/Side/Project/barapp_backend/dao/RecipeDAO.class
