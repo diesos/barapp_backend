@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "baskets", uniqueConstraints = {
-    @UniqueConstraint(columnNames = { "user_id", "is_archived", "is_converted" })
+    @UniqueConstraint(columnNames = { "user_id" })
 })
 public class Basket {
   @Id

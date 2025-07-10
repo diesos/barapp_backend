@@ -3,8 +3,10 @@ package com.Side.Project.barapp_backend.service;
 import com.Side.Project.barapp_backend.api.models.LoginBody;
 import com.Side.Project.barapp_backend.api.models.RegistrationBody;
 import com.Side.Project.barapp_backend.exception.UserAlreadyExist;
+import com.Side.Project.barapp_backend.models.Basket;
 import com.Side.Project.barapp_backend.models.User;
 import com.Side.Project.barapp_backend.models.UserRole;
+import com.Side.Project.barapp_backend.dao.BasketDAO;
 import com.Side.Project.barapp_backend.dao.UserDAO;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +19,15 @@ public class UserService {
     private final UserDAO userDAO;
     private final EncryptionService encryptionService;
     private final JWTService jwtService;
+    private final BasketDAO basketDAO;
 
-    public UserService(UserDAO userDAO, EncryptionService encryptionService, JWTService jwtService) {
+    public UserService(UserDAO userDAO, EncryptionService encryptionService, JWTService jwtService,
+            BasketDAO basketDAO) {
         this.userDAO = userDAO;
         this.encryptionService = encryptionService;
         this.jwtService = jwtService;
+        this.basketDAO = basketDAO;
+
     }
 
     /**
@@ -35,9 +41,15 @@ public class UserService {
         User user = new User();
         user.setEmail(registrationBody.getEmail());
         user.setPassword(encryptionService.encryptPassword(registrationBody.getPassword()));
-        user.setRole(UserRole.ROLE_USER); // Default role
+        user.setRole(UserRole.ROLE_USER);
 
-        return userDAO.save(user);
+        User savedUser = userDAO.save(user);
+
+        Basket basket = new Basket();
+        basket.setUser(savedUser);
+        basketDAO.save(basket);
+
+        return savedUser;
     }
 
     /**
