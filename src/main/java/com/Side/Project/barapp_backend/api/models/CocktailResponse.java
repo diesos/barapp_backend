@@ -113,4 +113,10 @@ public class CocktailResponse {
 		this.sizes = sizes;
 		this.imageUrl = imageUrl;
 	}
+
+	public CocktailResponse(Long id, String name, String imageUrl) {
+		this.id = id;
+		this.name = name;
+		this.imageUrl = imageUrl;
+	}
 }

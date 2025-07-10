@@ -15,6 +15,11 @@ public class BasketLine {
   @JoinColumn(name = "cocktail_id", nullable = false)
   private Cocktail cocktail;
 
+  // === AJOUT DE LA TAILLE ===
+  @ManyToOne(optional = false)
+  @JoinColumn(name = "cocktail_size_id", nullable = false)
+  private CocktailSize cocktailSize;
+
   @Column(name = "unit_price", nullable = false)
   private Integer unitPrice;
 
@@ -30,10 +35,12 @@ public class BasketLine {
   private Basket basket;
 
   // Constructors
-  public BasketLine() {}
+  public BasketLine() {
+  }
 
-  public BasketLine(Cocktail cocktail, Integer unitPrice, Integer quantity, Basket basket) {
+  public BasketLine(Cocktail cocktail, CocktailSize cocktailSize, Integer unitPrice, Integer quantity, Basket basket) {
     this.cocktail = cocktail;
+    this.cocktailSize = cocktailSize;
     this.unitPrice = unitPrice;
     this.quantity = quantity;
     this.basket = basket;
@@ -55,6 +62,14 @@ public class BasketLine {
 
   public void setCocktail(Cocktail cocktail) {
     this.cocktail = cocktail;
+  }
+
+  public CocktailSize getCocktailSize() {
+    return cocktailSize;
+  }
+
+  public void setCocktailSize(CocktailSize cocktailSize) {
+    this.cocktailSize = cocktailSize;
   }
 
   public Integer getUnitPrice() {

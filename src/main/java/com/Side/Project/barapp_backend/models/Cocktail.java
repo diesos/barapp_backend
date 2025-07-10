@@ -51,6 +51,7 @@ public class Cocktail {
   private List<BasketLine> basketLines = new ArrayList<>();
 
   @OneToMany(mappedBy = "cocktail", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OrderBy("id ASC")
   private List<CocktailSize> sizes = new ArrayList<>();
 
   // Constructors

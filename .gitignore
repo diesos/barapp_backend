@@ -6,3 +6,13 @@ target/classes/com/Side/Project/barapp_backend/dao/RecipeDAO.class
 target/classes/com/Side/Project/barapp_backend/models/Category.class
 target/classes/com/Side/Project/barapp_backend/models/Recipe.class
 target/classes/com/Side/Project/barapp_backend/models/RecipeIngredient.class
+target/classes/com/Side/Project/barapp_backend/api/models/CocktailRequest.class
+target/classes/com/Side/Project/barapp_backend/config/SecurityConfig.class
+target/classes/com/Side/Project/barapp_backend/controller/cocktail/CocktailController.class
+target/classes/com/Side/Project/barapp_backend/dao/CocktailDAO.class
+target/classes/com/Side/Project/barapp_backend/dao/RecipeDAO.class
+target/classes/com/Side/Project/barapp_backend/models/Category.class
+target/classes/com/Side/Project/barapp_backend/models/Cocktail.class
+target/classes/com/Side/Project/barapp_backend/models/Recipe.class
+target/classes/com/Side/Project/barapp_backend/models/RecipeIngredient.class
+target/classes/com/Side/Project/barapp_backend/service/CocktailService.class

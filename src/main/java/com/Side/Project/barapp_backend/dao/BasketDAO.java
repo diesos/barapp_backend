@@ -8,7 +8,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BasketDAO extends ListCrudRepository<Basket, Long> {
-    List<Basket> findByUser(User user);
-    Optional<Basket> findByUserAndIsArchivedFalseAndIsConvertedFalse(User user);
-    List<Basket> findByIsConvertedTrue();
+    Optional<Basket> findByUser(User user);
 }

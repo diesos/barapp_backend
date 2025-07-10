@@ -2,6 +2,8 @@ package com.Side.Project.barapp_backend.models;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "\"order\"") // Quotes needed because "order" is a reserved keyword in SQL
@@ -15,9 +17,9 @@ public class Order {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "basket_id", nullable = false)
-    private Basket basket;
+    // @ManyToOne(optional = false)
+    // @JoinColumn(name = "basket_id", nullable = false)
+    // private Basket basket;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
@@ -29,6 +31,9 @@ public class Order {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderLine> orderLines = new ArrayList<>();
+
     // Constructors
     public Order() {
         this.createdAt = LocalDateTime.now();
@@ -38,7 +43,7 @@ public class Order {
     public Order(User user, Basket basket, OrderStatus status) {
         this();
         this.user = user;
-        this.basket = basket;
+        // this.basket = basket;
         this.status = status;
     }
 
@@ -59,13 +64,13 @@ public class Order {
         this.user = user;
     }
 
-    public Basket getBasket() {
-        return basket;
-    }
+    // public Basket getBasket() {
+    // return basket;
+    // }
 
-    public void setBasket(Basket basket) {
-        this.basket = basket;
-    }
+    // public void setBasket(Basket basket) {
+    // this.basket = basket;
+    // }
 
     public OrderStatus getStatus() {
         return status;
@@ -95,5 +100,25 @@ public class Order {
     @PreUpdate
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
+    }
+
+    public List<OrderLine> getOrderLines() {
+        return orderLines;
+    }
+
+    public void setOrderLines(List<OrderLine> orderLines) {
+        this.orderLines = orderLines;
+    }
+
+    public Integer getTotalAmount() {
+        return orderLines.stream()
+                .mapToInt(ol -> ol.getUnitPrice() * ol.getQuantity())
+                .sum();
+    }
+
+    public Integer getTotalItems() {
+        return orderLines.stream()
+                .mapToInt(OrderLine::getQuantity)
+                .sum();
     }
 }

@@ -13,7 +13,7 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+      # - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql -- Du coup j'ai enlever la ligne car on peut pas generer tant que les tables ne sont pas crée par SpringBoot
     networks:
       - barapp-network
     healthcheck:
